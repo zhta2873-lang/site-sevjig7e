@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مهرجانات سامر المدني</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+        .header p {
+            font-size: 1.2em;
+        }
+        .player-container {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .video-player {
+            width: 100%;
+            height: 450px;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .festivals-list {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: right;
+        }
+        .festivals-list h2 {
+            color: #007bff;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .festivals-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .festivals-list li {
+            background-color: #e9ecef;
+            margin-bottom: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .festivals-list li:hover {
+            background-color: #dee2e6;
+        }
+        .festivals-list li span {
+            font-weight: bold;
+        }
+        .festivals-list li button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .festivals-list li button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>مبرمج زعيم</h1>
+        <p>تطبيق مهرجانات سامر المدني</p>
+    </div>
+
+    <div class="player-container">
+        <iframe id="youtubePlayer" class="video-player" src="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        <h3 id="currentFestivalTitle">اختر مهرجانًا للتشغيل</h3>
+    </div>
+
+    <div class="festivals-list">
+        <h2>قائمة المهرجانات</h2>
+        <ul id="festivalsUl"></ul>
+    </div>
+
+    <script>
+        const festivals = [
+            {
+                "id": 1,
+                "title": "Samer Elmedany - Millionaire Gely Clip",
+                "youtube_id": "LYfnzVBiDsc",
+                "embed_url": "https://www.youtube.com/embed/LYfnzVBiDsc"
+            },
+            {
+                "id": 2,
+                "title": "Samer Elmedany - Essam Sasa | Take your eyes off us",
+                "youtube_id": "o_uhFCS9TUw",
+                "embed_url": "https://www.youtube.com/embed/o_uhFCS9TUw"
+            },
+            {
+                "id": 3,
+                "title": "Look who\'s here (Ramadan is here) Samer Elmedany",
+                "youtube_id": "lZOg7QmwfEo",
+                "embed_url": "https://www.youtube.com/embed/lZOg7QmwfEo"
+            },
+            {
+                "id": 4,
+                "title": "The song \"Darkness and Anxiety\"",
+                "youtube_id": "9Y_iMCVwz8o",
+                "embed_url": "https://www.youtube.com/embed/9Y_iMCVwz8o"
+            },
+            {
+                "id": 5,
+                "title": "سامر المدنى | محسوبكوا مقاتل ( قتلت فيا الشاب الصايع )",
+                "youtube_id": "qL19RKLyDTs",
+                "embed_url": "https://www.youtube.com/embed/qL19RKLyDTs"
+            },
+            {
+                "id": 6,
+                "title": "حكايه من قلبي علي لساني | سامر المدني - اسلام كابونجا",
+                "youtube_id": "J70HVUjgeKc",
+                "embed_url": "https://www.youtube.com/embed/J70HVUjgeKc"
+            },
+            {
+                "id": 7,
+                "title": "شارب كاس في الحب انا استاذ | سامر المدنى - عصام صاصا",
+                "youtube_id": "AJcZMNtyvOg",
+                "embed_url": "https://www.youtube.com/embed/AJcZMNtyvOg"
+            },
+            {
+                "id": 8,
+                "title": "كليب عوده بعد شده - سامر المدني",
+                "youtube_id": "QIpZIXvzBq4",
+                "embed_url": "https://www.youtube.com/embed/QIpZIXvzBq4"
+            },
+            {
+                "id": 9,
+                "title": "سامر المدنى - كنت بغني بقول ياحديد",
+                "youtube_id": "b3rzjyR9Cac",
+                "embed_url": "https://www.youtube.com/embed/b3rzjyR9Cac"
+            },
+            {
+                "id": 10,
+                "title": "سامر المدنى - عاملين حمله فرنسيه",
+                "youtube_id": "bGPuLfyzySo",
+                "embed_url": "https://www.youtube.com/embed/bGPuLfyzySo"
+            },
+            {
+                "id": 11,
+                "title": "سامر المدنى | حقك عليا يا دنيا",
+                "youtube_id": "iK7MHHGYWP8",
+                "embed_url": "https://www.youtube.com/embed/iK7MHHGYWP8"
+            },
+            {
+                "id": 12,
+                "title": "سامر المدنى - ولا سلام ولا هاي",
+                "youtube_id": "UhoUJ9sgLJs",
+                "embed_url": "https://www.youtube.com/embed/UhoUJ9sgLJs"
+            },
+            {
+                "id": 13,
+                "title": "كليب شكلك متعوده - سامر المدني",
+                "youtube_id": "jFpcc3F_SQw",
+                "embed_url": "https://www.youtube.com/embed/jFpcc3F_SQw"
+            },
+            {
+                "id": 14,
+                "title": "دنيا السراب - سامر المدنى",
+                "youtube_id": "hwiPcziBPCo",
+                "embed_url": "https://www.youtube.com/embed/hwiPcziBPCo"
+            },
+            {
+                "id": 15,
+                "title": "رساله لكل اخصامي - سامر المدني - مصطفي الجن - هادي الصغير",
+                "youtube_id": "LClaUwQ1cIU",
+                "embed_url": "https://www.youtube.com/embed/LClaUwQ1cIU"
+            },
+            {
+                "id": 16,
+                "title": "اللي جاي كانتلوب - سامر المدني - احمد الدوجري",
+                "youtube_id": "wxhL15WLupw",
+                "embed_url": "https://www.youtube.com/embed/wxhL15WLupw"
+            },
+            {
+                "id": 17,
+                "title": "سامر المدنى - قطر الجدعنه",
+                "youtube_id": "PEhtlHE5coU",
+                "embed_url": "https://www.youtube.com/embed/PEhtlHE5coU"
+            },
+            {
+                "id": 18,
+                "title": "سامر المدنى - مش تمام ( غدارين )",
+                "youtube_id": "r7cwD0iM4GI",
+                "embed_url": "https://www.youtube.com/embed/r7cwD0iM4GI"
+            },
+            {
+                "id": 19,
+                "title": "قلدوا كل اللي عملته - سامر المدنى - حلقولو",
+                "youtube_id": "0dazy6Evt1A",
+                "embed_url": "https://www.youtube.com/embed/0dazy6Evt1A"
+            },
+            {
+                "id": 20,
+                "title": "اغنيه خوخه ( انا عايز لقطه جريئه )",
+                "youtube_id": "xgjfJ-qfDMY",
+                "embed_url": "https://www.youtube.com/embed/xgjfJ-qfDMY"
+            },
+            {
+                "id": 21,
+                "title": "مهرجان ياريته كان جابهم في القعده - سامر المدنى - عمر اي دي",
+                "youtube_id": "6ClkrULUwp0",
+                "embed_url": "https://www.youtube.com/embed/6ClkrULUwp0"
+            },
+            {
+                "id": 22,
+                "title": "مهرجان هربيكوا ( عيش وملح مش نافع )",
+                "youtube_id": "U8iuUuo7zAU",
+                "embed_url": "https://www.youtube.com/embed/U8iuUuo7zAU"
+            },
+            {
+                "id": 23,
+                "title": "مهرجان مرحب اخصامي هلا - سامر المدنى - احمد الدوجري",
+                "youtube_id": "wO-JJyIN9-w",
+                "embed_url": "https://www.youtube.com/embed/wO-JJyIN9-w"
+            },
+            {
+                "id": 24,
+                "title": "مهرجان يا برو يا سندي - سامر المدنى واحمد الدوجري",
+                "youtube_id": "7LjsAabBfhc",
+                "embed_url": "https://www.youtube.com/embed/7LjsAabBfhc"
+            },
+            {
+                "id": 25,
+                "title": "مهرجان مبسوط بالوحده ( عايش علي كوكب زومبي )",
+                "youtube_id": "3W4p2CbI4Ig",
+                "embed_url": "https://www.youtube.com/embed/3W4p2CbI4Ig"
+            },
+            {
+                "id": 26,
+                "title": "كليب مهرجان \"كلو قالك انا وانا\" سامر المدني",
+                "youtube_id": "ad4XOIWYThw",
+                "embed_url": "https://www.youtube.com/embed/ad4XOIWYThw"
+            },
+            {
+                "id": 27,
+                "title": "كليب بعشق حضرتك - عيد الام 2022",
+                "youtube_id": "_mq4qh02qxk",
+                "embed_url": "https://www.youtube.com/embed/_mq4qh02qxk"
+            },
+            {
+                "id": 28,
+                "title": "سامر المدني - بطير فوق",
+                "youtube_id": "fXTn4mZbL-Y",
+                "embed_url": "https://www.youtube.com/embed/fXTn4mZbL-Y"
+            }
+        ];
+
+        const youtubePlayer = document.getElementById('youtubePlayer');
+        const currentFestivalTitle = document.getElementById('currentFestivalTitle');
+        const festivalsUl = document.getElementById('festivalsUl');
+
+        function loadFestival(festival) {
+            youtubePlayer.src = festival.embed_url + "?autoplay=1";
+            currentFestivalTitle.textContent = festival.title;
+        }
+
+        // Populate the list
+        festivals.forEach(festival => {
+            const listItem = document.createElement('li');
+            const titleSpan = document.createElement('span');
+            titleSpan.textContent = festival.title;
+            const playButton = document.createElement('button');
+            playButton.textContent = 'تشغيل';
+            playButton.onclick = () => loadFestival(festival);
+
+            listItem.appendChild(titleSpan);
+            listItem.appendChild(playButton);
+            festivalsUl.appendChild(listItem);
+        });
+
+        // Load the first festival by default
+        if (festivals.length > 0) {
+            loadFestival(festivals[0]);
+        }
+    </script>
+</body>
+</html>
+</html>
